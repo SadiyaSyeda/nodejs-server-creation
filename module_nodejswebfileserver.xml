@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_nodejswebfileserver" default="compile.module.nodejswebfileserver">
+  <dirname property="module.nodejswebfileserver.basedir" file="${ant.file.module_nodejswebfileserver}"/>
+  
+  <property name="module.jdk.home.nodejswebfileserver" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.nodejswebfileserver" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.nodejswebfileserver" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.nodejswebfileserver" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="nodejswebfileserver.output.dir" value="${module.nodejswebfileserver.basedir}/out/production/NodeJSWebFileServer"/>
+  <property name="nodejswebfileserver.testoutput.dir" value="${module.nodejswebfileserver.basedir}/out/test/NodeJSWebFileServer"/>
+  
+  <path id="nodejswebfileserver.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="nodejswebfileserver.module.production.classpath">
+    <path refid="${module.jdk.classpath.nodejswebfileserver}"/>
+  </path>
+  
+  <path id="nodejswebfileserver.runtime.production.module.classpath">
+    <pathelement location="${nodejswebfileserver.output.dir}"/>
+  </path>
+  
+  <path id="nodejswebfileserver.module.classpath">
+    <path refid="${module.jdk.classpath.nodejswebfileserver}"/>
+    <pathelement location="${nodejswebfileserver.output.dir}"/>
+  </path>
+  
+  <path id="nodejswebfileserver.runtime.module.classpath">
+    <pathelement location="${nodejswebfileserver.testoutput.dir}"/>
+    <pathelement location="${nodejswebfileserver.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.nodejswebfileserver">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.nodejswebfileserver">
+    <patternset refid="excluded.from.module.nodejswebfileserver"/>
+  </patternset>
+  
+  <path id="nodejswebfileserver.module.sourcepath">
+    <dirset dir="${module.nodejswebfileserver.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.nodejswebfileserver" depends="compile.module.nodejswebfileserver.production,compile.module.nodejswebfileserver.tests" description="Compile module NodeJSWebFileServer"/>
+  
+  <target name="compile.module.nodejswebfileserver.production" depends="register.custom.compilers" description="Compile module NodeJSWebFileServer; production classes">
+    <mkdir dir="${nodejswebfileserver.output.dir}"/>
+    <javac2 destdir="${nodejswebfileserver.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.nodejswebfileserver}/javac">
+      <compilerarg line="${compiler.args.nodejswebfileserver}"/>
+      <bootclasspath refid="nodejswebfileserver.module.bootclasspath"/>
+      <classpath refid="nodejswebfileserver.module.production.classpath"/>
+      <src refid="nodejswebfileserver.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.nodejswebfileserver"/>
+    </javac2>
+    
+    <copy todir="${nodejswebfileserver.output.dir}">
+      <fileset dir="${module.nodejswebfileserver.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.nodejswebfileserver.tests" depends="register.custom.compilers,compile.module.nodejswebfileserver.production" description="compile module NodeJSWebFileServer; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.nodejswebfileserver" description="cleanup module">
+    <delete dir="${nodejswebfileserver.output.dir}"/>
+    <delete dir="${nodejswebfileserver.testoutput.dir}"/>
+  </target>
+</project>
